@@ -7,7 +7,7 @@ class SGroup(object):
     
     def __init__(self, n):
         """
-        Takes the number of abse elements to be permuted
+        Takes the number of elements to be permuted
         """
         pass
 
@@ -176,6 +176,11 @@ class Perm(object):
         elif type(perm) == tuple:
             # treate input as tuple of cycles
             
+            # if it is a tuple of integers, turn into a singleton
+            if len(perm) > 0:
+                if type(perm[0]) == int:
+                    perm = (perm,)
+            
             # validate cycle format
             if not(all([self.validate_cycle(cycle) for cycle in perm])):
                 raise TypeError("Improperly formatted cycle input: " + str(perm))
@@ -239,3 +244,5 @@ class Perm(object):
             return(Perm(self.cycles + Perm(other).cycles))
         except TypeError as e:
             raise TypeError(str(e) + "\nCan't multply Perm by type "+ str(type(other)))
+    
+    

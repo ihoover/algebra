@@ -1,5 +1,5 @@
 import unittest
-from symm import *
+from sgroup import *
 
 class TestPermClassFunctions(unittest.TestCase):
     """
@@ -134,7 +134,7 @@ class TestPermClassFunctions(unittest.TestCase):
         """
         l = [0,1,3,2]
         cycles = ((3,4),)
-        
+
         self.assertEqual(cycles, Perm.make_cycles(l))
     
     def test_make_list(self):
@@ -240,11 +240,24 @@ class TestPermInit(unittest.TestCase):
         
     def test_init_cycle(self):
         """
-        test creating a permutaiton with a list
+        test creating a permutaiton with a cycle
         """
         l = [0,1,3,2]
         cycle = ((3,4),)
         p = Perm(cycle)
+        
+        self.assertEqual(p.list, l)
+        self.assertEqual(p.cycles, cycle)
+    
+    def test_init_intcycle(self):
+        """
+        test creating a permutaiton with a cycle (just one)
+        """
+        
+        l = [0,1,3,2]
+        cycle0 = (3,4)
+        cycle = ((3,4),)
+        p = Perm(cycle0)
         
         self.assertEqual(p.list, l)
         self.assertEqual(p.cycles, cycle)
@@ -383,8 +396,8 @@ class TestPermMul(unittest.TestCase):
         self.assertEqual(p1*p2, p3)
     
     def test_mul_error(self):
-        p1 = Perm(((1,2),))
-        p2 = Perm(((1,2,3),))
-        p3 = Perm(((2,3),))
+        p1 = Perm((1,2))
+        p2 = Perm((1,2,3))
+        p3 = Perm((2,3))
         
         self.assertRaises(TypeError, p1.__mul__, 'hello')
