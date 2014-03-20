@@ -358,7 +358,7 @@ class TestPermCall(unittest.TestCase):
         self.assertEqual(s1, self.perm1(s))
         
 
-class TestPermEq(unittest.TestCase):
+class TestPermOp(unittest.TestCase):
     """
     test permutation equality
     """
@@ -383,11 +383,6 @@ class TestPermEq(unittest.TestCase):
         self.assertRaises(TypeError, self.p1.__eq__, 'hello')
 
 
-class TestPermMul(unittest.TestCase):
-    """
-    test permutation multiplication
-    """
-    
     def test_mul(self):
         p1 = Perm(((1,2),))
         p2 = Perm(((1,2,3),))
@@ -397,7 +392,13 @@ class TestPermMul(unittest.TestCase):
     
     def test_mul_error(self):
         p1 = Perm((1,2))
-        p2 = Perm((1,2,3))
-        p3 = Perm((2,3))
         
-        self.assertRaises(TypeError, p1.__mul__, 'hello')
+        self.assertEqual(NotImplemented, p1.__mul__('hello'))
+
+    def test_inv(self):
+        
+        p = Perm((1,2,3))
+        pi = p.inv
+        l = ['a', 4, {'tree':3}]
+        self.assertEqual((p*pi).list, [0])
+        self.assertEqual(l, (p*pi)(l))

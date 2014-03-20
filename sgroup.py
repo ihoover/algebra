@@ -1,5 +1,45 @@
 import collections
 
+class mset(set):
+    """
+    Basically a set object, but supports element-wise multiplication:
+    {1, 2, 3}*a = {1*a, 2*a, 3*a}
+    
+    Implemented by adding __mul__ and __rmul__
+    """
+    def __mul__(self, other):
+        """
+        {1, 2, 3}*x = {1*x, 2*x, 3*x}
+        
+        If x is a set, 1*x|2*x|3*x
+        """
+        if isinstance(other, collections.Iterable):
+            result = mset()
+            for element in other:
+                result = result | self*element
+        
+        else:
+            result = mset([element*other for element in self])
+        
+        return result
+    
+    def __rmul__(self,other):
+        """
+        x*{1, 2, 3} = {X*1, x*2, x*3}
+        
+        If x is a set, x*1|x*2|x*3
+        """
+        if isinstance(other, collections.Iterable):
+            result = mset()
+            for element in other:
+                result = result | element*self
+        
+        else:
+            result = mset([other*element for element in self])
+        
+        return result
+
+
 class SGroup(object):
     """
     A symmetric group object
@@ -9,7 +49,22 @@ class SGroup(object):
         """
         Takes the number of elements to be permuted
         """
-        pass
+        
+        if not(isinstance(n, int) and n > 1):
+            raise TypeError
+        
+        # base case is n == 2, {(1), (1,2)}
+        if n == 2:
+            self.elements = mset({Perm(()), Perm((1,2))})
+        
+        else:
+            # generate all transpositions with the n'th element
+            trans = [Perm((i+1, n)) for i in range(n-1)]
+            
+            # multiply these transpositions by all permutations on n-1
+            # elements to get the new elements of Sn
+            
+            self.elements = SGroup(n-1).elements | SGroup(n-1).elements*trans
 
 
 class Perm(object):
@@ -135,7 +190,7 @@ class Perm(object):
             for i in range(len(cycle)):
                 permuted_list[cycle[i] - 1] = unpermed_list[cycle[(i + 1) % len(cycle)] - 1]
         
-        return permuted_list
+        return Perm.format_list(permuted_list)
 
     @classmethod
     def validate_cycle(cls, cycle):
@@ -180,6 +235,9 @@ class Perm(object):
             if len(perm) > 0:
                 if type(perm[0]) == int:
                     perm = (perm,)
+            else:
+                # interpret empty tuple as identity
+                perm = ((1,),)
             
             # validate cycle format
             if not(all([self.validate_cycle(cycle) for cycle in perm])):
@@ -190,6 +248,7 @@ class Perm(object):
             self.cycles = Perm.make_cycles(self.list)
         
         elif type(perm) == type(self):
+            # just make a copy
             self.list = list(perm.list)
             self.cycles = perm.cycles
             
@@ -202,6 +261,9 @@ class Perm(object):
         Apply the permutation to an iterable object.  Returns type error if
         the object is not iterable or is simply too short.
         """
+        # check that the  thing is iterable
+        if not(isinstance(iterable, collections.Iterable)):
+            raise TypeError("Operand not iterable. Operand:" + str(operand))
         
         # check the length of the iterable
         if len(iterable) < len(self.list):
@@ -243,6 +305,27 @@ class Perm(object):
         try:
             return(Perm(self.cycles + Perm(other).cycles))
         except TypeError as e:
-            raise TypeError(str(e) + "\nCan't multply Perm by type "+ str(type(other)))
+            return NotImplemented
     
+    def __hash__(self):
+        """
+        just use the cycles to hash
+        """
+        return self.cycles.__hash__()
     
+    def __str__(self):
+        return str(self.cycles)
+    
+    @property
+    def inv(self):
+        """
+        return the inverse permutation
+        """
+        
+        # simple.  Just reverse all the cycles.
+        
+        inv_cycles = tuple()
+        for cycle in reversed(self.cycles):
+            inv_cycles += tuple(reversed(cycle))
+        
+        return Perm(inv_cycles)
