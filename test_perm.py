@@ -360,7 +360,7 @@ class TestPermCall(unittest.TestCase):
 
 class TestPermOp(unittest.TestCase):
     """
-    test permutation equality
+    test permutation oporations
     """
     def setUp(self):
         self.p1 = Perm(((1,2),))
@@ -398,7 +398,18 @@ class TestPermOp(unittest.TestCase):
     def test_inv(self):
         
         p = Perm((1,2,3))
-        pi = p.inv
+        pi = p.inv()
         l = ['a', 4, {'tree':3}]
         self.assertEqual((p*pi).list, [0])
         self.assertEqual(l, (p*pi)(l))
+    
+    def test_order(self):
+        
+        p = Perm(((1,2,3),(4,5),(6,7,8,9,10)))
+        self.assertEqual(p.Order(), 30)
+    
+    def test_order_empty(self):
+        
+        self.assertEqual(1, Perm([]).Order())
+
+

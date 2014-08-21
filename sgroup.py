@@ -1,49 +1,6 @@
 import collections
 import itertools
-
-class mset(set):
-    """
-    Basically a set object, but supports element-wise multiplication:
-    {1, 2, 3}*a = {1*a, 2*a, 3*a}
-    
-    Implemented by adding __mul__ and __rmul__
-    """
-    def __mul__(self, other):
-        """
-        {1, 2, 3}*x = {1*x, 2*x, 3*x}
-        
-        If x is a set, 1*x|2*x|3*x
-        """
-        if isinstance(other, (set, frozenset)):
-            result = mset()
-            for element in other:
-                #result = result | self*element
-                result |= self*element
-        
-        else:
-            result = mset([element*other for element in self])
-        
-        return result
-    
-    def __rmul__(self,other):
-        """
-        x*{1, 2, 3} = {X*1, x*2, x*3}
-        
-        If x is a set, x*1|x*2|x*3
-        """
-        if isinstance(other, (set, frozenset)):
-            result = mset()
-            for element in other:
-                result |= element*self
-        
-        else:
-            result = mset([other*element for element in self])
-        
-        return result
-    
-    def __str__(self):
-        return '{'+', '.join(str(element) for element in self) + '}'
-
+from algebra import Element, mset, lcm
 
 class SGroup(object):
     """
@@ -64,12 +21,12 @@ class SGroup(object):
         
         else:
             ## generate all transpositions with the n'th element
-            #trans = [Perm((i+1, n)) for i in range(n-1)]
+            # trans = [Perm((i+1, n)) for i in range(n-1)]
 
             ## multiply these transpositions by all permutations on n-1
             ## elements to get the new elements of Sn
-            #prev = SGroup(n-1)
-            #self.elements = prev.elements | prev.elements*set(trans)
+            # prev = SGroup(n-1)
+            # self.elements = prev.elements | prev.elements*set(trans)
             
             # using itertools we get better performance
             perms = itertools.permutations(range(n))
@@ -78,7 +35,7 @@ class SGroup(object):
     def __str__(self):
         return self.elements.__str__()
 
-class Perm(object):
+class Perm(Element):
     """
     A permutation
     """
@@ -327,7 +284,6 @@ class Perm(object):
     def __str__(self):
         return ''.join(str(cycle).replace(',', '') for cycle in self.cycles)
     
-    @property
     def inv(self):
         """
         return the inverse permutation
@@ -340,3 +296,11 @@ class Perm(object):
             inv_cycles += tuple(reversed(cycle))
         
         return Perm(inv_cycles)
+    
+    def Order(self):
+        """
+        Returns the of the permutation. 
+        """
+        
+        lengths = [len(cycle) for cycle in self.cycles]
+        return lcm(*lengths)
