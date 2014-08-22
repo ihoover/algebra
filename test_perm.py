@@ -267,7 +267,6 @@ class TestPermInit(unittest.TestCase):
         test creating a permutaiton with a list that should cause an error
         """
         l = [0,1,3,'2']
-        cycle = ((3,4),)
         self.assertRaises(TypeError, Perm, l)
     
     def test_init_cycle_error(self):
