@@ -90,5 +90,5 @@ class mset(set):
     def __str__(self):
         return '{'+', '.join(str(element) for element in self) + '}'
 
-class group:
+class Group:
     pass

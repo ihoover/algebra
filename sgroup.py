@@ -1,8 +1,8 @@
 import collections
 import itertools
-from algebra import Element, mset, lcm
+from algebra import Element, mset, lcm, Group
 
-class SGroup(object):
+class SGroup(Group):
     """
     A symmetric group object
     """
