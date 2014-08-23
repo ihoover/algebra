@@ -50,6 +50,14 @@ class Element(object):
         pass
     
     @abstractmethod
+    def __hash__(self, other):
+        """
+        should hash itself based on value, so that of a == b, then
+        a.__hash__() == b.__hash__()
+        """
+        pass
+    
+    @abstractmethod
     def Order(self):
         """
         Returns the order of the element. 0 indicates infinite.
@@ -93,7 +101,7 @@ class mset(set):
         return '{'+', '.join(str(element) for element in self) + '}'
 
 
-class Group:
+class Group(object):
     """
     The algebraic group.
     """
@@ -161,7 +169,7 @@ class Group:
             for a in self.elements:
                 if all(self.bin_op(a,b) == self.bin_op(b,a) for b in self.elements):
                     self.center.add(a)
-        return self._center        
+        return self._center   
     
     def __mod__(self, other):
         """
@@ -176,7 +184,8 @@ class Group:
         """
         
         return NotImplemented
-        
+
+
 class SGroup(Group):
     """
     A symmetric group object
@@ -186,15 +195,21 @@ class SGroup(Group):
         """
         Takes the number of elements to be permuted
         """
-        
-        if not(isinstance(n, int) and n > 1):
-            raise TypeError("")
-        
-        perms = itertools.permutations(range(n))
-        self.elements = mset(Perm(list(perm)) for perm in perms)
-         
-    def __str__(self):
-        return self.elements.__str__()
+
+        if not(isinstance(n, int) and n > 0):
+            raise TypeError(str.format("Cant create symmetric group on {} elements", n))
+
+        self.n = n
+        super(SGroup, self).__init__([Perm(tup) for tup in itertools.combinations(range(1,n+1), 2)])
+    
+    @property
+    def elements(self):
+        if self._elements is None:
+            perms = itertools.permutations(range(self.n))
+            self._elements = mset(Perm(list(perm)) for perm in perms)
+
+        return self._elements
+
 
 class Perm(Element):
     """

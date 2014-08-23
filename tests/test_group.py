@@ -67,7 +67,19 @@ class TestSGroup(unittest.TestCase):
         s3 = mset([Perm(()), Perm((1,2)), Perm((1,3)), Perm((3,2)), Perm((1,2,3)), Perm((1,3,2))])
         self.assertEqual(SGroup(3).elements, s3)
     
-    def test_init_8def(self):
+    def test_init_7def(self):
         from math import factorial as fac
-        self.assertEqual(len(SGroup(8).elements), fac(8))
+        self.assertEqual(len(SGroup(7).elements), fac(7))
     
+    def test_init_error_string(self):
+        self.assertRaises(TypeError, SGroup, 'd')
+    
+    def test_init_error_non_int(self):
+        self.assertRaises(TypeError, SGroup, 5.4)
+
+    def test_init_error_neg_int(self):
+        self.assertRaises(TypeError, SGroup, -2)
+    
+    def test_trivial_center(self):
+        g = SGroup(5)
+        self.assertEqual(g.center, {Perm(())})
