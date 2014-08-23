@@ -1,6 +1,5 @@
-import unittest
-from sgroup import *
 from algebra import *
+import unittest
 
 class Testmset(unittest.TestCase):
     """
@@ -47,7 +46,7 @@ class Testmset(unittest.TestCase):
         prod = mset([m2*m1 for m1 in self.elements for m2 in self.elements2])
         self.assertEqual(prod, set(self.elements2)*self.mset)
 
-
+     
 class Testlcm(unittest.TestCase):
     """
     test the lcm function for mulstiple integers
@@ -81,18 +80,3 @@ class Testlcm(unittest.TestCase):
         """
         
         self.assertEqual(30, lcm(2,3,5,6))
-
-        
-class TestSGroup(unittest.TestCase):
-    """
-    test the symmetric group
-    """
-    
-    def test_init(self):
-        s3 = mset([Perm(()), Perm((1,2)), Perm((1,3)), Perm((3,2)), Perm((1,2,3)), Perm((1,3,2))])
-        self.assertEqual(SGroup(3).elements, s3)
-    
-    def test_init_8def(self):
-        from math import factorial as fac
-        self.assertEqual(len(SGroup(8).elements), fac(8))
-    

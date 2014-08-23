@@ -1,5 +1,5 @@
 import unittest
-from sgroup import *
+from algebra import Perm
 
 class TestPermClassFunctions(unittest.TestCase):
     """
