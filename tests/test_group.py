@@ -69,7 +69,8 @@ class TestSGroup(unittest.TestCase):
     
     def test_init_7def(self):
         from math import factorial as fac
-        self.assertEqual(len(SGroup(7).elements), fac(7))
+        n = 7
+        self.assertEqual(len(SGroup(n).elements), fac(n))
     
     def test_init_error_string(self):
         self.assertRaises(TypeError, SGroup, 'd')

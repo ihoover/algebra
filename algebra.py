@@ -206,7 +206,7 @@ class SGroup(Group):
     def elements(self):
         if self._elements is None:
             perms = itertools.permutations(range(self.n))
-            self._elements = mset(Perm(list(perm)) for perm in perms)
+            self._elements = mset(Perm(list(perm), validate = False) for perm in perms)
 
         return self._elements
 
@@ -221,22 +221,35 @@ class Perm(Element):
         """
         Returns boolean.  Could this list represent a permutation?
         """
-        
-        # see that all entries are ints
-        if any([type(el)!=int for el in l]):
-            return False
+        length = len(l)
+        max_so_far = 0
+        zero_in = False
+        one_in = False
+        for el in l:
+            
+            # only accept ints
+            if type(el) != int:
+                return False
+            
+            # update max value
+            if el > max_so_far:
+                max_so_far = el
+            
+            # see if 0 or 1 is in the lists
+            zero_in |= el == 0
+            one_in |= el == 1              
         
         # see that no elements are repeated
-        if len(set(l)) != len(l):
+        if len(set(l)) != length:
             return False
         
         # see that it contains a 1 or a 0
-        if not(0 in l) and not(1 in l) and len(l)>0:
+        if not(zero_in) and not(one_in) and length>0:
             return False
         
         # see that we skip no numbers
-        if len(l) > 0:
-            if max(l) != len(l) - int(0 in l):
+        if length > 0:
+            if max_so_far != length - int(zero_in):
                 return False
         
         return True
@@ -341,7 +354,7 @@ class Perm(Element):
         """
         Returns boolean. Is tuple a valid cycle?
         """
-        
+
         # can only contain integers
         if any([type(el)!= int for el in cycle]):
             return False
@@ -356,19 +369,23 @@ class Perm(Element):
         
         return True
     
-    def __init__(self, perm):
+    def __init__(self, perm, validate = True):
         """
         Takes in a permutation, either as a permuted list or a tuple of cycles
         """
+        self._list = None
+        self._cycles = None
         
         if type(perm) == list:
             # treate input as a numeric list that has been permuted
             
             # validate the list format
-            if self.validate_list(perm):
-                self.list  = self.format_list(perm)
-                # generate the cycle representation
-                self.cycles = Perm.make_cycles(self.list)
+            if not(validate):
+                self._list  = self.format_list(perm)
+            
+            elif self.validate_list(perm):
+                self._list  = self.format_list(perm)
+                
             else:
                 raise TypeError("Improperly formatted list input: " + str(perm))
         
@@ -387,18 +404,32 @@ class Perm(Element):
             if not(all(self.validate_cycle(cycle) for cycle in perm)):
                 raise TypeError("Improperly formatted cycle input: " + str(perm))
             
-            # the following order simplifies the cycles
-            self.list = Perm.make_list(perm)
-            self.cycles = Perm.make_cycles(self.list)
+            # the following order simplifies the cycles (multiplies them, as it were)
+            self._list = Perm.make_list(perm)
+            self._cycles = Perm.make_cycles(self._list)
         
         elif type(perm) == type(self):
             # just make a copy
-            self.list = list(perm.list)
-            self.cycles = perm.cycles
+            self._list = list(perm.list)
+            self._cycles = perm.cycles
             
         else:
             raise TypeError("Can't create Perm out of type " + str(type(perm)))
             
+    
+    @property
+    def cycles(self):
+        if self._cycles is None:
+            self._cycles = Perm.make_cycles(self._list)
+        
+        return self._cycles
+    
+    @property
+    def list(self):
+        if self._list is None:
+            self._list = Perm.make_list(self._cycles)
+        
+        return self._list
     
     def __call__(self, iterable):
         """
@@ -448,14 +479,14 @@ class Perm(Element):
         """
         try:
             return(Perm(self.cycles + Perm(other).cycles))
-        except TypeError as e:
+        except TypeError:
             return NotImplemented
     
     def __hash__(self):
         """
         just use the cycles to hash
         """
-        return self.cycles.__hash__()
+        return str(self.list).__hash__()
     
     def __str__(self):
         return ''.join(str(cycle).replace(',', '') for cycle in self.cycles)
