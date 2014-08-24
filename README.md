@@ -8,6 +8,8 @@ The following classes and abstrac classes are defined:
 - `Perm` -- a class representing a permutation
 - `SGroup` -- a class representing a symmetric group, a subclass of `Group`
 
+To run the tests, execute the eponymous shell script `test`.
+To add a test file, create a file in the tests directory whose name starts with 'test_'.
 
 ##Groups##
 The `Group` class is initialized with an iterable of generators, and a binary operation.

@@ -1,0 +1,4 @@
+#!/bin/bash
+# find all files in the test folder that are named test_-something-.py and put the import statement into the __init__ file
+find -name test*.py | sed -r s,\(^\./[a-z]*/\)\(test_[a-z]*\)\(\.py\),from\ \\2\ import\ \*, | tee tests/__init__.py
+python -m unittest tests
