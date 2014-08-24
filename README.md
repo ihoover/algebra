@@ -37,7 +37,7 @@ The following methods are required.
 - `__mul__(self, other)`
 - `__eq__(self,other)`
 - `__hash__(self)`
-- `order(self)` -- returns the order of the elements.  0 is infinite.
+- `order(self)` -- returns the order of the element.  0 is infinite.
 
 ##Permutations##
 The `Perm`  class represents a permutation.  It is initialized with either a tuple or a list, and the distinction is important.  A permutation can also be initialized from another `Perm` object to create a copy.
