@@ -32,14 +32,14 @@ class Element(object):
         """
         Returns the inverse element
         """
-        pass
+        return
     
     @abstractmethod
     def __mul__(self, other):
         """
         Returns the product of the two elements
         """
-        pass
+        return
     
     def __pow__(self, n):
         """computes the power of the element using the fast exponentiation method
@@ -49,7 +49,7 @@ class Element(object):
             raise TypeError(str.format("Can't raise element to {}.\n Must be non-negative integer.",n))
         
         bin_pow = format(n,'b')[::-1]
-        prod = self*self.inv() # start with the identity
+        prod = self.identity() # start with the identity
         square = prod
         for bit in bin_pow:
             if square == square.inv():
@@ -68,7 +68,7 @@ class Element(object):
         Returns boolean True if the two elements are equal, False if not.
         Should return TypeError if they can't be compared.
         """
-        pass
+        return
     
     @abstractmethod
     def __hash__(self, other):
@@ -76,14 +76,22 @@ class Element(object):
         should hash itself based on value, so that of a == b, then
         a.__hash__() == b.__hash__()
         """
-        pass
+        return
     
     @abstractmethod
     def Order(self):
         """
         Returns the order of the element. 0 indicates infinite.
         """
-        pass
+        return
+    
+    @classmethod
+    @abstractmethod
+    def identity(cls):
+        """
+        returns the identity element
+        """
+        return
 
 class mset(set):
     """
@@ -236,6 +244,14 @@ class Perm(Element):
     """
     A permutation
     """
+    
+    @classmethod
+    def identity(cls):
+        """
+        returns the identity permutation
+        """
+        
+        return Perm([])
     
     @classmethod
     def validate_list(cls, l):
