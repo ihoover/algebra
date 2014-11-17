@@ -41,6 +41,27 @@ class Element(object):
         """
         pass
     
+    def __pow__(self, n):
+        """computes the power of the element using the fast exponentiation method
+        n: integer"""
+        
+        if (type(n) != int) or (n<0):
+            raise TypeError(str.format("Can't raise element to {}.\n Must be non-negative integer.",n))
+        
+        bin_pow = format(n,'b')[::-1]
+        prod = self*self.inv() # start with the identity
+        square = prod
+        for bit in bin_pow:
+            if square == square.inv():
+                square = self
+            else:
+                square = square * square
+            if bit == '1':
+                prod = prod * square
+        
+        return prod    
+    
+
     @abstractmethod
     def __eq__(self, other):
         """
@@ -162,7 +183,7 @@ class Group(object):
     @property
     def center(self):
         """
-        returns the center of the group (all comuting elements)
+        returns the center of the group (all commuting elements)
         """
         if self._center is None:
             self._center = mset()
@@ -197,7 +218,7 @@ class SGroup(Group):
         """
 
         if not(isinstance(n, int) and n > 0):
-            raise TypeError(str.format("Cant create symmetric group on {} elements", n))
+            raise TypeError(str.format("Cant create symmetric group on {} elements.\n Argument must be positive integer", n))
 
         self.n = n
         super(SGroup, self).__init__([Perm(tup) for tup in itertools.combinations(range(1,n+1), 2)])
@@ -372,6 +393,14 @@ class Perm(Element):
     def __init__(self, perm, validate = True):
         """
         Takes in a permutation, either as a permuted list or a tuple of cycles
+        
+        perm: the permutation that this Perm object represents.
+            
+            Valid formats:
+            * a list from 0 to n that has been permuted by the permutation you want this objec to represent.  e.g. [0,1,3,2] represents the permutatio nthat switched the 3rd and fourth element.
+            * the cycle representation. one tuple represents a cycle.  To have multiple cycles, each should be a term in a tuple.   e.g. ((1,2),(3,4)).
+            
+        validate: boolean.  If `validate` is True, the input will be checked to make sure it validly represents a permutation.  This is the default.  If False, no validation will occure.  This is faster.
         """
         self._list = None
         self._cycles = None

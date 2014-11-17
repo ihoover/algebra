@@ -410,5 +410,9 @@ class TestPermOp(unittest.TestCase):
     def test_order_empty(self):
         
         self.assertEqual(1, Perm([]).Order())
+    
+    def test_power_valid(self):
+        p = Perm((1,2,3,4,5,6,7,8,9,10))
+        self.assertEqual(p*p*p*p, p**4)
 
 
