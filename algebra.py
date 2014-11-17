@@ -52,7 +52,7 @@ class Element(object):
         prod = self.identity() # start with the identity
         square = prod
         for bit in bin_pow:
-            if square == square.inv():
+            if square == self.identity():
                 square = self
             else:
                 square = square * square
