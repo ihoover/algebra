@@ -45,7 +45,7 @@ class Element(object):
         """computes the power of the element using the fast exponentiation method
         n: integer"""
         
-        if (type(n) != int) or (n<0):
+        if (type(n) != int and type(n)!= long ) or (n<0):
             raise TypeError(str.format("Can't raise element to {}.\n Must be non-negative integer.",n))
         
         bin_pow = format(n,'b')[::-1]
