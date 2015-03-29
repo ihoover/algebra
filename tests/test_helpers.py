@@ -80,3 +80,44 @@ class Testlcm(unittest.TestCase):
         """
         
         self.assertEqual(30, lcm(2,3,5,6))
+
+    
+class TestGcd(unittest.TestCase):
+    """
+    test gcd function
+    """
+    
+    def setUp(self):
+        
+        self.p1 = 2
+        self.p2 = 3
+        self.p3 = 5
+    
+    def test_no_input(self):
+        
+        self.assertRaises(TypeError, lcm)
+    
+    def test_one_input(self):
+        
+        self.assertEqual(2,gcd(2))
+        
+    def test_2_inputs_rel_composit(self):
+        
+        self.assertEqual(self.p1, gcd(self.p1, self.p2*self.p1))
+    
+    def test_2_inputs_rel_prime(self):
+        
+        self.assertEqual(1, gcd(self.p1, self.p2))
+    
+    def test_3_inputs_all_relprime(self):
+        
+        self.assertEqual(1, gcd(self.p1, self.p2, self.p3))
+    
+    def test_3_inputs_two_relprime(self):
+        
+        self.assertEqual(1, gcd(self.p1, self.p2, self.p3*self.p2))
+    
+    
+    def test_3_inputs_all_relcomposit(self):
+
+        self.assertEqual(self.p1, gcd(self.p1,self.p2*self.p1, self.p3*self.p1))

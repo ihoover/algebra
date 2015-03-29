@@ -1,2 +1,3 @@
 *.pyc
 tests/__init__.py
+*~

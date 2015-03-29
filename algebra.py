@@ -2,11 +2,20 @@ from abc import ABCMeta, abstractmethod
 import itertools
 import collections
 
-def gcd(m,n):
+def gcd_2(m,n):
 	if n==0:
 		return m
 	r = m%n
 	return(gcd(n,r))
+
+def gcd(*args):
+    return reduce(gcd_2, args)
+
+def sign(n):
+    if n==0:
+        return 0
+    else:
+        return abs(n)/n
 
 def lcm(*args):
     def lcm_short(a,b):
@@ -77,13 +86,6 @@ class Element(object):
         """
         should hash itself based on value, so that of a == b, then
         a.__hash__() == b.__hash__()
-        """
-        return
-    
-    @abstractmethod
-    def Order(self):
-        """
-        Returns the order of the element. 0 indicates infinite.
         """
         return
     
