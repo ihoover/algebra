@@ -6,7 +6,7 @@ def gcd_2(m,n):
 	if n==0:
 		return m
 	r = m%n
-	return(gcd(n,r))
+	return(abs(gcd(n,r)))
 
 def gcd(*args):
     return reduce(gcd_2, args)

@@ -54,14 +54,14 @@ class TestQform(unittest.TestCase):
         self.assertEqual(q1*q2, Qform(20,28,13))
     
     def testIdentity(self):
-        for n in range(1,100):
+        for n in range(1,200):
             for form in ClassGroup.allReduced(-4*n):
                 self.assertEqual(form*form.identity(), form)
             for form in ClassGroup.allReduced(-4*n + 1):
                 self.assertEqual(form*form.identity(), form)
     
     def testInv(self):
-        for n in range(1,100):
+        for n in range(1,200):
             for form in ClassGroup.allReduced(-4*n):
                 self.assertEqual(form*form.inv(), form.identity())
             for form in ClassGroup.allReduced(-4*n + 1):
