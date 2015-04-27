@@ -66,3 +66,19 @@ class TestQform(unittest.TestCase):
                 self.assertEqual(form*form.inv(), form.identity())
             for form in ClassGroup.allReduced(-4*n + 1):
                 self.assertEqual(form*form.inv(), form.identity())
+    
+    def testCall_principal(self):
+        q = Qform(1,0,11)
+        self.assertEqual(q(0,1), 11)
+        self.assertEqual(q(1,0), 1)
+        self.assertEqual(q(1,1), 12)
+        self.assertEqual(q(1,2), 45)
+        self.assertEqual(q(2,1), 15)
+    
+    def testCall(self):
+        q = Qform(5,-3,13)
+        self.assertEqual(q(0,1), 13)
+        self.assertEqual(q(1,0), 5)
+        self.assertEqual(q(1,1), 15)
+        self.assertEqual(q(1,2), 51)
+        self.assertEqual(q(2,1), 27)

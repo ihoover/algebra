@@ -169,6 +169,13 @@ class Qform(Element):
             return self
         else:
             return Qform(self.a, -self.b, self.c)
+    
+    def __call__(self, x, y):
+        """
+        evaluate the form on a x,y pair
+        """
+        
+        return self.a*x**2 + self.b*x*y + self.c*y**2
 
 
 class ClassGroup(Group):
@@ -212,4 +219,5 @@ class ClassGroup(Group):
         
         # these reduced forms are our elements
         forms = self.allReduced(D)
+        self.D = D
         super(ClassGroup, self).__init__(forms)
