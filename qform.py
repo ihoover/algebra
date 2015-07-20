@@ -68,6 +68,8 @@ class Qform(Element):
                     m = -m
     
                 (a,b,c) = cls.sheer(a,b,c,m)
+
+                continue
             
             if (b < 0) and (a == c):
                 (a,b,c) = cls.rotate(a,b,c)
@@ -75,7 +77,8 @@ class Qform(Element):
             
             if (b < 0) and (abs(b) == a):
                 (a,b,c) = cls.sheer(a,b,c,1)
-        
+                continue
+                 
         return (a,b,c)
     
     def __init__(self, a,b,c):

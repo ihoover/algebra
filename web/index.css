@@ -1,0 +1,38 @@
+table {
+    border-collapse: collapse;
+}
+
+table, td, th {
+    border: 1px solid black;
+}
+td {
+    padding: 15px;
+}
+h1 {
+  text-align: center;
+  font-family: Helvetica;
+  background: #AABBCC;
+  padding: .2em 1em;
+  border-top: 3px solid #8899AA;
+  border-bottom: 3px solid #8899AA;
+  color: #112233;
+}
+
+.input{
+	text-align: center;
+	font-family: Helvetica;
+}
+
+#msg{
+	visibility: hidden;
+	color: #DD4444;
+}
+
+.output{
+	text-align: center;
+}
+#multable{
+    margin-left: auto;
+    margin-right: auto;
+    visibility: hidden;
+}
