@@ -45,7 +45,7 @@ var Qform = function(a,b,c){
 					m = (this.b - mod(this.b,(2*this.a))) / (2*this.a)
 				}
 
-				if (Math.sign(this.a * m) == Math.sign(this.b)){
+				if (sign(this.a * m) == sign(this.b)){
 					m = -m;
 				}
 				this.sheer(m);
@@ -108,6 +108,16 @@ var Qform = function(a,b,c){
 function mod(x,y){
 	/* needed to fix javascript bug with mod :( */
 	return ((x%y)+y)%y
+}
+
+function sign(n){
+	/*needed because sign is not implemented in IE or Safari*/
+	if (n == 0){
+		return 0;
+	}
+	else{
+		return n/Math.abs(n);
+	}
 }
 
 function gcd(m,n){
@@ -179,7 +189,7 @@ function reduce(f){
 				m = (f.b - mod(f.b,(2*f.a))) / (2*f.a)
 			}
 
-			if (Math.sign(f.a * m) == Math.sign(f.b)){
+			if (sign(f.a * m) == sign(f.b)){
 				m = -m;
 			}
 			f = sheer(f,m);
