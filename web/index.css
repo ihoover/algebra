@@ -9,6 +9,7 @@ td {
     padding: 10px;
     text-align: center;
     font-family: monospace;
+    white-space: nowrap;
 }
 td.header{
   /*background-color: #AACCAA;*/

@@ -1,29 +1,37 @@
 /*
  * Javascript for running the index.html page
  */
-_D_ = NaN;
+OLD_D = NaN;
+
+ERROR_MSG = "\\(D\\) must be negative and \\(D\\equiv 0,1\\mod 4\\)";
+COMP_MSG = "Computing...";
+TOO_BIG_MSG = "The discriminant you have entered is very large so the computation might take a while.\nDo you wish to continue?"
+TOO_BIG = -100000;
 compute = function(){
 	var text = document.getElementById("D");
 	if (text.value == ""){
 		return;
 	}
 	D = parseInt(text.value);
-	if(D == _D_){
+	if(D == OLD_D){
 		return;
 	}
 	else{
-		_D_ = D;
+		OLD_D = D;
 	}
 	if (!(D<0) || mod(D,4) > 1){
-		var msg = document.getElementById("msg");
-		msg.style.visibility = "visible";
+		showMsg(ERROR_MSG);
 		var tbl  = document.getElementById('multable');
 		tbl.style.visibility = "hidden";
 	}
 	else{
-		var msg = document.getElementById("msg")
-		msg.style.visibility = "hidden";
-		tableCreate(D);
+		if(D<TOO_BIG){
+			if(!confirm(TOO_BIG_MSG)){
+				return;
+			}
+		}
+		showMsg(COMP_MSG);
+		setTimeout(function(){tableCreate(D)},100);
 	}
 }
 
@@ -46,7 +54,7 @@ function tableCreate(D){
 
 	// now go through and set the color
 	color_key = 0;
-	step = Math.floor(360/(num_genera + 1));
+	step = Math.floor(360/(num_genera));
 	h = 180;
 	s = "75%";
 	l = "75%";
@@ -61,7 +69,7 @@ function tableCreate(D){
 	function render(form){
 		var text = "";
 		if (forms.length < RENDER_THRESHOLD){
-			text = form.toStringMathJax();
+			text = form.toStringHtml();
 		}
 		else{
 			text = form.toStringCompact();
@@ -76,12 +84,12 @@ function tableCreate(D){
 			var td = tr.insertCell();
 			if (j==0 && i > 0){
 				f = forms[i-1];
-				text = f.toStringMathJax();
+				text = f.toStringHtml();
 				td.className = "header";
 			}
 			else if (i==0 && j > 0){
 				f = forms[j-1]
-				text = f.toStringMathJax();
+				text = f.toStringHtml();
 				td.className = "header";
 			}
 			else if (i>0 && j > 0){
@@ -100,10 +108,22 @@ function tableCreate(D){
 		}
 	}
 	tableVisible();
-	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub], hideMsg());
 }
 
 function tableVisible(){
 	var tbl  = document.getElementById('multable');
 	tbl.style.visibility = "visible";
+}
+
+function hideMsg(){
+	var msg = document.getElementById("msg")
+	msg.style.visibility = "hidden";
+}
+
+function showMsg(text){
+	var msg = document.getElementById("msg")
+	msg.innerHTML = text;
+	msg.style.visibility = "visible";
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 }
