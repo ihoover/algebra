@@ -54,7 +54,7 @@ function tableCreate(D){
 
 	// now go through and set the color
 	color_key = 0;
-	step = Math.floor(360/(num_genera));
+	step = Math.floor(360/(num_genera+1));
 	h = 180;
 	s = "75%";
 	l = "75%";
@@ -62,7 +62,6 @@ function tableCreate(D){
 		genus_color[genera[genera.length - i]] = "hsl(" + (mod(h + color_key*step, 360)) + "," + s + "," + l + ")"
 		color_key ++;
 	}
-	console.log(genus_color)
 
 	var RENDER_THRESHOLD = 5;
 	
@@ -125,5 +124,5 @@ function showMsg(text){
 	var msg = document.getElementById("msg")
 	msg.innerHTML = text;
 	msg.style.visibility = "visible";
-	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub, msg]);
 }
