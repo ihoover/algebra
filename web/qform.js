@@ -66,7 +66,7 @@ var Qform = function(a,b,c){
 			return this;
 		}
 		else{
-			return new Qform(self.a, -self.b, self.c);
+			return new Qform(this.a, -this.b, this.c);
 		}
 	}
 
@@ -83,10 +83,10 @@ var Qform = function(a,b,c){
 
 		if (this.b != 0){
 			if(this.b < 0){
-				b_str = "-";
+				b_str = " - ";
 			}
 			else{
-				b_str = '+';
+				b_str = ' + ';
 			}
 			res += b_str;
 			if (this.b*this.b !== 1){
@@ -95,37 +95,104 @@ var Qform = function(a,b,c){
 			res += 'xy';
 		}
 
-		res += '+';
+		res += ' + ';
 		if (this.c != 1){
 			res += this.c.toString();
 		}
 		res += 'y^2';
 		return res;
 	}
-}
 
-
-function mod(x,y){
-	/* needed to fix javascript bug with mod :( */
-	return ((x%y)+y)%y
-}
-
-function sign(n){
-	/*needed because sign is not implemented in IE or Safari*/
-	if (n == 0){
-		return 0;
+	this.toStringHtml = function(){
+		return this.toString().replace(/\^2/g, "<sup>2</sup>");
 	}
-	else{
-		return n/Math.abs(n);
-	}
-}
 
-function gcd(m,n){
-	if (n==0){
-			return Math.abs(m);
+	this.toStringMathJax = function(){
+		return "\\(" + this.toString() + "\\)";
 	}
-	r = mod(m,n);
-	return(Math.abs(gcd(n,r)));
+
+	this.toStringCompact = function(){
+		return "(" + this.a.toString() + " " + this.b.toString() + " " + this.c.toString()+")";
+	}
+
+	this.eval = function(x,y){
+		return this.a*x*x + this.b*x*y + this.c*y*y;
+	}
+
+	this.character = function(a){
+		/* evaluates the assigned character of the quadratic form class...
+			It doesn't get much more cryptic than this function.  For a full
+			explination see 'Primes of the form x^2+ny^2' by David Cox, Chapter 1,
+			section 3 */
+		var epsilon = function(a){
+			return intPow(-1, (a*a - 1)/8);
+		}
+
+		var delta = function(a){
+			return intPow(-1, (a-1)/2);
+		}
+
+		var characters = []
+		var oddPrimes = getOddPrimeFactors(this.D);
+		for (var i = 0; i < oddPrimes.length; i++){
+			characters.push(function(a){return LegendreSymbol(a, oddPrimes[i]);});
+		}
+
+		if(mod(this.D, 4) === 0){
+			var n = this.D/-4;
+			if((mod(n,4) === 1) || (mod(n,8) === 4)){
+				characters.push(delta);
+			}
+			else if (mod(n,8) === 2) {
+				characters.push((function(a){return delta(a)*epsilon(a);}));
+			}
+			else if (mod(n,8) === 6) {
+				characters.push(epsilon);
+			}
+			else if (mod(n,8) === 0){
+				characters.push(delta);
+				characters.push(epsilon);	
+			}
+		}
+
+		var res = [];
+		for (var i = 0; i < characters.length; i++){
+			res.push(characters[i](a));
+		}
+
+		return res;
+	}
+
+	this.genus = function(){
+		/* returns an array like [-1,1,1,-1] which is unique to the genus for
+			the specific discriminant.
+
+			It doesn't get much more cryptic than this function.  For a full
+			explination see 'Primes of the form x^2+ny^2' by David Cox, Chapter 1,
+			section 3 */
+
+		// find output relatively prime to the ddiscriminant
+		var a = 0;
+		for(var i = 1; i<100; i++){
+			for(var j = 1; j < 100; j++){
+				if(gcd(this.eval(i,j), this.D) === 1){
+					a = this.eval(i,j);
+					break;
+				}
+			}
+			if(a != 0){
+				break;
+			}
+		}
+
+		// if we failed to find an input that gives rel prime output
+		if (a===0){
+			alert("couldn't find rel prime outpur :(");
+			return
+		}
+
+		return this.character(a)
+	}
 }
 
 function isReduced(f){
@@ -260,10 +327,10 @@ function mul(f1, f2){
 
 function identity(D){
 	if(mod(D,4) == 1){
-		return Qform(1,1,(1-D)/4);
+		return new Qform(1,1,(1-D)/4);
 	}
 	else{
-		return Qform(1,0,-D/4);
+		return new Qform(1,0,-D/4);
 	}
 }
 
@@ -303,11 +370,112 @@ function allReduced(D){
 	return forms;
 }
 
-contains_qform = function(list, qform){
+function contains_qform(list, qform){
 	for(i=0; i<list.length; i++){
 		if(qform.eq(list[i])){
 			return true;
 		}
 	}
 	return false;
+}
+
+function mod(x,y){
+	/* needed to fix javascript bug with mod :( */
+	if(y==0){
+		return x;
+	}
+	return ((x%y)+y)%y;
+}
+
+function sign(n){
+	/*needed because Math.sign is not implemented in IE or Safari*/
+	if (n == 0){
+		return 0;
+	}
+	else{
+		return n/Math.abs(n);
+	}
+}
+
+function gcd(m,n){
+	if (n==0){
+			return Math.abs(m);
+	}
+	r = mod(m,n);
+	return(Math.abs(gcd(n,r)));
+}
+
+function getOddPrimeFactors(integer){
+	var factors = getPrimeFactors(integer);
+	if (factors[0] == 2){
+		return factors.slice(1);
+	}
+	else{
+		return factors;
+	}
+}
+
+function getPrimeFactors(integer, factors){
+	if(factors===undefined){
+		factors = [];
+	}
+	integer = Math.abs(integer);
+	quotient = 0;
+
+	for(var i = 2; i <= Math.sqrt(integer); i++){
+		quotient = integer/i;
+
+		if(quotient === Math.floor(quotient)){
+			integer = integer/i;
+			if (factors.length > 0){
+				if(factors[factors.length - 1] !== i){
+					factors.push(i);
+				}
+			}
+			else{
+				factors.push(i);
+			}
+			return getPrimeFactors(integer,factors);
+		}
+	}
+	if (factors.length > 0){
+		if(factors[factors.length - 1] !== integer){
+			factors.push(integer);
+		}
+	}
+	else{
+		factors.push(integer);
+	}
+	return factors;
+}
+
+function dec2bin(dec){
+    /* binary representation */
+    return (dec >>> 0).toString(2);
+}
+
+function intPow(base, exponent, modulus){
+	if (modulus===undefined){
+		modulus = 0;
+	}
+	var binExp = dec2bin(exponent);
+	var res = 1;
+	var square = base;
+	for (var i = 0; i < binExp.length; i++){
+		if (binExp[binExp.length - i - 1] === "1"){
+			res = mod(res*square, modulus);
+		}
+		square = mod(square*square, modulus);
+	}
+	return res
+}
+
+function LegendreSymbol(a,p){
+	var res = intPow(a,(p-1)/2,p);
+	if (res > 1){
+		return -1;
+	}
+	else{
+		return res;
+	}
 }

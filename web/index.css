@@ -6,11 +6,12 @@ table, td, th {
     border: 1px solid black;
 }
 td {
-    padding: 15px;
+    padding: 10px;
     text-align: center;
+    font-family: monospace;
 }
 td.header{
-  background-color: #AABBCC;
+  /*background-color: #AACCAA;*/
 }
 h1 {
   text-align: center;
