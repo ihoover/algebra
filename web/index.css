@@ -29,7 +29,7 @@ h1 {
 	font-family: Helvetica;
 }
 
-#msg{
+#msg, #computing{
 	visibility: hidden;
 	color: #DD4444;
 }

@@ -17,42 +17,40 @@ var banner = document.getElementsByClassName("github-banner");
 if(banner[0]){
 	banner[0].style.display = "none";
 }
-var title = document.getElementsByTagName("header")[0].childNodes[1].childNodes[1];
-if(title){
-	title.style.maxWidth="1000px";
+var title = document.getElementsByTagName("header");
+if(title[0]){
+	title[0].childNodes[1].childNodes[1].style.maxWidth="1000px";
 }
-var footer = document.getElementsByTagName("footer")[0];
-if(footer){
-	footer.style.display="none";
+var footer = document.getElementsByTagName("footer");
+if(footer[0]){
+	footer[0].style.display="none";
 }
-validate = function(){
+var validate = function(e){
 	var text = document.getElementById("D");
 	var button = document.getElementById("compute");
 	if (text.value == ""){
 		return true;
 	}
 	D = parseInt(text.value);
-	if(D == OLD_D){
-		return;
-	}
-	else{
-		OLD_D = D;
-	}
-	
+
+	e = e || window.event;
 	if (!(D<0) || mod(D,4) > 1){
-		showMsg(ERROR_MSG);
+		showMsgError();
 		var tbl  = document.getElementById('multable');
 		tbl.style.visibility = "hidden";
 		button.disabled = true;
 		return true;
 	}
 	else{
-		hideMsg();
+		hideMsgError();
 		button.disabled = false;
-		return false;
+		
+		if (e.keyCode == 13){
+			compute()
+		}
 	}
 }
-compute = function(){
+var compute = function(){
 	var text = document.getElementById("D");
 	if (text.value == ""){
 		return;
@@ -69,7 +67,7 @@ compute = function(){
 				return;
 			}
 		}
-		showMsg(COMP_MSG);
+		showMsgComputing();
 		setTimeout(function(){tableCreate(D)},100);
 	}
 }
@@ -156,7 +154,7 @@ function tableCreate(D){
 		}
 	}
 	tableVisible();
-	MathJax.Hub.Queue(["Typeset",MathJax.Hub], hideMsg());
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub], hideMsgComputing());
 }
 
 function tableVisible(){
@@ -164,14 +162,23 @@ function tableVisible(){
 	tbl.style.visibility = "visible";
 }
 
-function hideMsg(){
+function hideMsgError(){
 	var msg = document.getElementById("msg")
 	msg.style.visibility = "hidden";
 }
 
-function showMsg(text){
+function hideMsgComputing(){
+	var msg = document.getElementById("computing")
+	msg.style.visibility = "hidden";
+}
+
+function showMsgError(text){
 	var msg = document.getElementById("msg")
-	msg.innerHTML = text;
+	msg.style.visibility = "visible";
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub, msg]);
+}
+function showMsgComputing(text){
+	var msg = document.getElementById("computing")
 	msg.style.visibility = "visible";
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub, msg]);
 }

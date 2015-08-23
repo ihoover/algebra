@@ -10,8 +10,9 @@
     <body>
         <h1 id="header">Quadratic Form Calculator</h1>
         <div class = input>
-        		<input type="text" placeholder="Enter Discriminant" onkeyup='validate()' id="D" size="20"></input>
-        		<input type="button" onclick="compute()" id="compute" disabled="true" value="compute"></inpute>
+                <input type="text" placeholder="Enter Discriminant" onkeyup='validate(event)' id="D" size="20"></input>
+        		<input type="submit" onclick="compute()" id="compute" disabled="true" value="compute"></inpute>
+                <span id="computing" >computing...</span>
                 <br/>
         		<span id="msg" >\(D\) must be negative and \(D\equiv 0,1\mod 4\)</span>
         </div>
