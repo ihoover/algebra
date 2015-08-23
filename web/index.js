@@ -9,8 +9,8 @@ TOO_BIG_MSG = "The discriminant you have entered is very large so the computatio
 TOO_BIG = -100000;
 
 var tile = document.getElementsByClassName("tile");
-if(tile){
-	tile.width = "100%";
+if(tile[0]){
+	tile[0].width = "100%";
 }
 
 validate = function(){
