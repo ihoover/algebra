@@ -17,11 +17,14 @@ var banner = document.getElementsByClassName("github-banner");
 if(banner[0]){
 	banner[0].style.display = "none";
 }
-var title = document.getElementsByTagName("header")[0].childNodes[0].childNodes[0];
+var title = document.getElementsByTagName("header")[0].childNodes[1].childNodes[1];
 if(title){
 	title.style.maxWidth="1000px";
 }
-
+var footer = document.getElementsByTagName("footer")[0].childNodes[1].childNodes[1];
+if(footer){
+	title.style.display="none";
+}
 validate = function(){
 	var text = document.getElementById("D");
 	var button = document.getElementById("compute");
@@ -50,10 +53,6 @@ validate = function(){
 	}
 }
 compute = function(){
-	var title = document.getElementsByTagName("header")[0].childNodes[0].childNodes[0];
-	if(title){
-		title.style.maxWidth="1000px";
-	}
 	var text = document.getElementById("D");
 	if (text.value == ""){
 		return;
