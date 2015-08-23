@@ -42,3 +42,12 @@ h1 {
     margin-right: auto;
     visibility: hidden;
 }
+sup {
+    vertical-align: super;
+    font-size: smaller;
+}
+
+sub {
+    vertical-align: sub;
+    font-size: smaller;
+}

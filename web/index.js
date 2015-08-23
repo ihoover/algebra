@@ -8,6 +8,11 @@ COMP_MSG = "Computing...";
 TOO_BIG_MSG = "The discriminant you have entered is very large so the computation might take a while.\nDo you wish to continue?"
 TOO_BIG = -100000;
 
+var tile = document.getElementsByClassName("tile");
+if(tile){
+	tile.width = "100%";
+}
+
 validate = function(){
 	var text = document.getElementById("D");
 	var button = document.getElementById("compute");
@@ -112,7 +117,7 @@ function tableCreate(D){
 				f = forms[i-1];
 				text = f.toStringHtml();
 				if (forms.length > RENDER_THRESHOLD){
-					text = text + " = " +form_tags[f.toString()];	
+					text = form_tags[f.toString()] + ": " + text;	
 				}
 				td.className = "header";
 			}
