@@ -8,11 +8,6 @@ COMP_MSG = "Computing...";
 TOO_BIG_MSG = "The discriminant you have entered is very large so the computation might take a while.\nDo you wish to continue?"
 TOO_BIG = -100000;
 
-var tile = document.getElementsByClassName("tile");
-if(tile[0]){
-	tile[0].width = "100%";
-}
-
 validate = function(){
 	var text = document.getElementById("D");
 	var button = document.getElementById("compute");
@@ -65,6 +60,12 @@ compute = function(){
 function tableCreate(D){
 	var tbl  = document.getElementById('multable');
 	tbl.innerHTML="";
+	
+	// for rendering on simplybuilt
+	var tile = document.getElementsByClassName("tile");
+	if(tile[0]){
+		tile[0].width = "100%";
+	}
 	var forms = allReduced(D);
 	var text = "";
 	var genus_color = {};
