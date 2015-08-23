@@ -17,6 +17,10 @@ var banner = document.getElementsByClassName("github-banner");
 if(banner[0]){
 	banner[0].style.display = "none";
 }
+var title = document.getElementsByTagName("header")[0].childNodes[0].childNodes[0];
+if(title){
+	title.style.maxWidth="1000px";
+}
 
 validate = function(){
 	var text = document.getElementById("D");
