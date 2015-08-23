@@ -23,7 +23,7 @@ if(title){
 }
 var footer = document.getElementsByTagName("footer")[0].childNodes[1].childNodes[1];
 if(footer){
-	title.style.display="none";
+	footer.style.display="none";
 }
 validate = function(){
 	var text = document.getElementById("D");
