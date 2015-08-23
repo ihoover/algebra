@@ -21,7 +21,7 @@ var title = document.getElementsByTagName("header")[0].childNodes[1].childNodes[
 if(title){
 	title.style.maxWidth="1000px";
 }
-var footer = document.getElementsByTagName("footer")[0].childNodes[1].childNodes[1];
+var footer = document.getElementsByTagName("footer")[0];
 if(footer){
 	footer.style.display="none";
 }
