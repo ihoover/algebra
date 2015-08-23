@@ -5,12 +5,14 @@
         <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/javascript" src="qform.js"></script>
         <script type="text/javascript" src="index.js"></script>
+        <!--<script src="https://raw.githubusercontent.com/ihoover/algebra/master/web/index.js"></script><script src="https://raw.githubusercontent.com/ihoover/algebra/master/web/qform.js"></script>-->
     </head>
     <body>
         <h1 id="header">Quadratic Form Calculator</h1>
         <div class = input>
-        		<input type="text" placeholder="Enter Discriminant" onkeyup='compute()' id="D" size="20"></input>
-        		<br/>
+        		<input type="text" placeholder="Enter Discriminant" onkeyup='validate()' id="D" size="20"></input>
+        		<input type="button" onclick="compute()" id="compute" disabled="true" value="compute"></inpute>
+                <br/>
         		<span id="msg" >\(D\) must be negative and \(D\equiv 0,1\mod 4\)</span>
         </div>
         <div class="output">

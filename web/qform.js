@@ -171,10 +171,10 @@ var Qform = function(a,b,c){
 			explination see 'Primes of the form x^2+ny^2' by David Cox, Chapter 1,
 			section 3 */
 
-		// find output relatively prime to the ddiscriminant
+		// find output relatively prime to the discriminant
 		var a = 0;
-		for(var i = 1; i<100; i++){
-			for(var j = 1; j < 100; j++){
+		for(var i = 0; i<100; i++){
+			for(var j = 0; j < 100; j++){
 				if(gcd(this.eval(i,j), this.D) === 1){
 					a = this.eval(i,j);
 					break;
@@ -187,7 +187,7 @@ var Qform = function(a,b,c){
 
 		// if we failed to find an input that gives rel prime output
 		if (a===0){
-			alert("couldn't find rel prime outpur :(");
+			alert("couldn't find rel prime output :(");
 			return
 		}
 
@@ -366,7 +366,20 @@ function allReduced(D){
 			}
 		}
 	}
-
+	
+	var sortFunc = function(a,b){
+		// sort qforms by genus
+		var res = 0;
+		for (var i = 0; i < a.genus().length; i++){
+			res = b.genus()[i] - a.genus()[i];
+			if (res !== 0){
+				break;
+			}
+		}
+		return res;
+	}
+	forms.sort(sortFunc);
+	
 	return forms;
 }
 
@@ -381,6 +394,8 @@ function contains_qform(list, qform){
 
 function mod(x,y){
 	/* needed to fix javascript bug with mod :( */
+	
+	// added this condition to avoid `if` statemenst eslewhere
 	if(y==0){
 		return x;
 	}

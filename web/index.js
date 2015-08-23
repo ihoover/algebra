@@ -7,10 +7,12 @@ ERROR_MSG = "\\(D\\) must be negative and \\(D\\equiv 0,1\\mod 4\\)";
 COMP_MSG = "Computing...";
 TOO_BIG_MSG = "The discriminant you have entered is very large so the computation might take a while.\nDo you wish to continue?"
 TOO_BIG = -100000;
-compute = function(){
+
+validate = function(){
 	var text = document.getElementById("D");
+	var button = document.getElementById("compute");
 	if (text.value == ""){
-		return;
+		return true;
 	}
 	D = parseInt(text.value);
 	if(D == OLD_D){
@@ -19,6 +21,26 @@ compute = function(){
 	else{
 		OLD_D = D;
 	}
+	
+	if (!(D<0) || mod(D,4) > 1){
+		showMsg(ERROR_MSG);
+		var tbl  = document.getElementById('multable');
+		tbl.style.visibility = "hidden";
+		button.disabled = true;
+		return true;
+	}
+	else{
+		hideMsg();
+		button.disabled = false;
+		return false;
+	}
+}
+compute = function(){
+	var text = document.getElementById("D");
+	if (text.value == ""){
+		return;
+	}
+	D = parseInt(text.value);
 	if (!(D<0) || mod(D,4) > 1){
 		showMsg(ERROR_MSG);
 		var tbl  = document.getElementById('multable');
@@ -62,16 +84,21 @@ function tableCreate(D){
 		genus_color[genera[genera.length - i]] = "hsl(" + (mod(h + color_key*step, 360)) + "," + s + "," + l + ")"
 		color_key ++;
 	}
-
-	var RENDER_THRESHOLD = 5;
 	
+	
+	
+	var RENDER_THRESHOLD = 6;
+	var form_tags = {};
+	for (var i=0; i < forms.length; i++){
+		form_tags[forms[i].toString()] = "f<sub>" + i + "</sub>";
+	}
 	function render(form){
 		var text = "";
-		if (forms.length < RENDER_THRESHOLD){
+		if (forms.length <= RENDER_THRESHOLD){
 			text = form.toStringHtml();
 		}
 		else{
-			text = form.toStringCompact();
+			text = form_tags[form.toString()];
 		}
 		return text;
 	}
@@ -84,11 +111,15 @@ function tableCreate(D){
 			if (j==0 && i > 0){
 				f = forms[i-1];
 				text = f.toStringHtml();
+				if (forms.length > RENDER_THRESHOLD){
+					text = text + " = " +form_tags[f.toString()];	
+				}
 				td.className = "header";
 			}
 			else if (i==0 && j > 0){
 				f = forms[j-1]
-				text = f.toStringHtml();
+				// text = f.toStringHtml();
+				text = render(f);
 				td.className = "header";
 			}
 			else if (i>0 && j > 0){
