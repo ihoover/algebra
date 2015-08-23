@@ -92,7 +92,7 @@ function tableCreate(D){
 
 	// now go through and set the color
 	color_key = 0;
-	step = Math.floor(360/(num_genera+1));
+	step = Math.floor(360/(num_genera));
 	h = 180;
 	s = "75%";
 	l = "75%";
