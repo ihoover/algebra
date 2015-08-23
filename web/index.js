@@ -50,6 +50,10 @@ validate = function(){
 	}
 }
 compute = function(){
+	var title = document.getElementsByTagName("header")[0].childNodes[0].childNodes[0];
+	if(title){
+		title.style.maxWidth="1000px";
+	}
 	var text = document.getElementById("D");
 	if (text.value == ""){
 		return;
