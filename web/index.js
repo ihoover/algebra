@@ -64,7 +64,7 @@ function tableCreate(D){
 	// for rendering on simplybuilt
 	var tile = document.getElementsByClassName("tile");
 	if(tile[0]){
-		tile[0].width = "100%";
+		tile[0].style.width = "100%";
 	}
 	var forms = allReduced(D);
 	var text = "";
