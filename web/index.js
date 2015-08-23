@@ -14,8 +14,8 @@ if(tile[0]){
 	tile[0].style.width = "100%";
 }
 var banner = document.getElementsByClassName("github-banner");
-if(tile[0]){
-	tile[0].style.display = "none";
+if(banner[0]){
+	banner[0].style.display = "none";
 }
 
 validate = function(){
